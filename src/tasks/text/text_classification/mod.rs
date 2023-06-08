@@ -11,6 +11,7 @@ pub struct TextClassifier {
     build_options: TextClassifierBuilder,
     model_resource: Box<dyn ModelResourceTrait>,
     graph: Graph,
+    input_count: usize,
 }
 
 impl TextClassifier {
@@ -24,7 +25,7 @@ impl TextClassifier {
         let input_to_tensor_info =
             model_resource_check_and_get_impl!(self.model_resource, to_tensor_info, 0)
                 .try_to_text()?;
-        let input_count = self.model_resource.input_tensor_count();
+        let input_count = self.input_count;
         let mut input_tensor_shapes = Vec::with_capacity(input_count);
         let mut input_tensor_bufs = Vec::with_capacity(input_count);
         for i in 0..input_count {
